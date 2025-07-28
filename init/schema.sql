@@ -1,23 +1,23 @@
 CREATE TABLE IF NOT EXISTS pessoa_fisica (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    renda_mensal REAL,
-    idade INTEGER,
-    nome_completo TEXT,
-    celular TEXT,
-    email TEXT,
-    categoria TEXT,
-    saldo REAL
+    renda_mensal REAL NOT NULL,
+    idade INTEGER NOT NULL,
+    nome_completo TEXT NOT NULL,
+    celular TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    categoria TEXT NOT NULL,
+    saldo REAL NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS pessoa_juridica (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    faturamento REAL,
-    idade INTEGER,
-    nome_fantasia TEXT,
-    celular TEXT,
-    email_corporativo TEXT,
-    categoria TEXT,
-    saldo REAL
+    faturamento REAL NOT NULL,
+    idade INTEGER NOT NULL,
+    nome_fantasia TEXT NOT NULL UNIQUE,
+    celular TEXT NOT NULL UNIQUE,
+    email_corporativo TEXT NOT NULL UNIQUE,
+    categoria TEXT NOT NULL,
+    saldo REAL NOT NULL
 );
 
 INSERT INTO pessoa_fisica (renda_mensal, idade, nome_completo, celular, email, categoria, saldo)
