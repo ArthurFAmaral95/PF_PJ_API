@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS pessoa_fisica (
     celular TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     categoria TEXT NOT NULL,
-    saldo REAL NOT NULL
+    saldo REAL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS pessoa_juridica (
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS pessoa_juridica (
     celular TEXT NOT NULL UNIQUE,
     email_corporativo TEXT NOT NULL UNIQUE,
     categoria TEXT NOT NULL,
-    saldo REAL NOT NULL
+    saldo REAL DEFAULT 0
 );
 
 INSERT INTO pessoa_fisica (renda_mensal, idade, nome_completo, celular, email, categoria, saldo)

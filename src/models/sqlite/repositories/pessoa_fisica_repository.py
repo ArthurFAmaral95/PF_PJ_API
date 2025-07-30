@@ -26,3 +26,21 @@ class PessoaFisicaRepository:
         return client
       except NoResultFound:
         return []
+      
+  def insert_client(self, renda_mensal: int, idade: int, nome_completo: str, celular: str, email: str, categoria: str, saldo: int = 0) -> None:
+    with self.__db_connection as database:
+      try:
+        new_client_data = PessoaFisicaTable(
+          renda_mensal = renda_mensal,
+          idade = idade,
+          nome_completo = nome_completo,
+          celular = celular,
+          email = email,
+          categoria = categoria,
+          saldo = saldo
+        )    
+        database.session.add(new_client_data)
+        database.session.commit()
+      except Exception as execption:
+        database.session.rollback()
+        raise execption

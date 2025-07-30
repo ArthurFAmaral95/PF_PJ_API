@@ -29,4 +29,15 @@ def test_list_specific_pessoa_fisica_client():
   assert response.categoria == 'Categoria A'
   assert response.renda_mensal == 5000
 
-  
+@pytest.mark.skip(reason='adição de cliente no banco')
+def test_insert_client_pessoa_fisica():
+  renda_mensal = 10000
+  idade = 35
+  nome_completo = 'Nome Completo'
+  celular = '8765-4321'
+  email = 'email@example.com'
+  categoria = 'Categoria B'
+  saldo = 6000
+
+  repo = PessoaFisicaRepository(db_connection_handler)
+  repo.insert_client(renda_mensal=renda_mensal, idade=idade, nome_completo=nome_completo, celular=celular, email=email, categoria=categoria, saldo=saldo)
