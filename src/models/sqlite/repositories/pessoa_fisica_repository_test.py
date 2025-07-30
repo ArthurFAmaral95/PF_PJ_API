@@ -1,5 +1,6 @@
 from unittest import mock
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
+from sqlalchemy.orm.exc import NoResultFound
 from src.models.sqlite.entities.pessoa_fisica import PessoaFisicaTable
 from src.models.sqlite.repositories.pessoa_fisica_repository import PessoaFisicaRepository
 
@@ -28,12 +29,26 @@ class MockConnection:
   def __enter__(self): return self
   def __exit__(self, exc_type, exc_val, exc_tb): pass
 
+class MockConnectionNoResult:
+  def __init__(self):
+    self.session = UnifiedAlchemyMagicMock()
+    self.session.query.side_effect = self.__raise_no_result_found
+
+  def __raise_no_result_found(self, *args, **kwargs):
+    raise NoResultFound('No result found')
+
+  def __enter__(self): return self
+  def __exit__(self, exc_type, exc_val, exc_tb): pass
+
 def test_list_all_clients():
   mock_connection = MockConnection()
   repo = PessoaFisicaRepository(mock_connection)
   response = repo.list_all_clients()
   first_client = response[0]
 
+  mock_connection.session.query.assert_called_once_with(PessoaFisicaTable)
+  mock_connection.session.all.assert_called_once()
+  mock_connection.session.filter.assert_not_called()
 
   assert first_client.id == 1
   assert first_client.nome_completo == 'Fulano de Tal'
@@ -44,10 +59,26 @@ def test_list_all_clients():
   assert first_client.renda_mensal == 1000
   assert first_client.saldo == 100
 
+def test_list_all_clients_no_result():
+  mock_connection = MockConnectionNoResult()
+  repo = PessoaFisicaRepository(mock_connection)
+  response = repo.list_all_clients()
+
+  mock_connection.session.query.assert_called_once_with(PessoaFisicaTable)
+  mock_connection.session.all.assert_not_called()
+  mock_connection.session.filter.assert_not_called()
+
+  assert response == []
+
 def test_list_specific_client():
   mock_connection = MockConnection()
   repo = PessoaFisicaRepository(mock_connection)
   response = repo.list_specific_client(1)
+
+  mock_connection.session.query.assert_called_once_with(PessoaFisicaTable)
+  mock_connection.session.all.assert_not_called()
+  mock_connection.session.filter.assert_called_once_with(PessoaFisicaTable.id == 1)
+  mock_connection.session.first.assert_called_once()
 
   assert response.id == 1
   assert response.nome_completo == 'Fulano de Tal'
@@ -57,3 +88,15 @@ def test_list_specific_client():
   assert response.categoria == 'Categoria A'
   assert response.renda_mensal == 1000
   assert response.saldo == 100
+
+def test_list_specific_client_no_result():
+  mock_connection = MockConnectionNoResult()
+  repo = PessoaFisicaRepository(mock_connection)
+  response = repo.list_specific_client(1)
+
+  mock_connection.session.query.assert_called_once_with(PessoaFisicaTable)
+  mock_connection.session.filter.assert_not_called()
+  mock_connection.session.all.assert_not_called()
+  mock_connection.session.first.assert_not_called()
+
+  assert response == []
