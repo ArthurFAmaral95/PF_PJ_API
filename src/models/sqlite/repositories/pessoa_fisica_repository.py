@@ -47,7 +47,11 @@ class PessoaFisicaRepository(ClientInterface):
         raise execption
       
   def get_balance(self, id: int) -> int:
-    pass
+    try:
+      balance = self.list_specific_client(id=id).saldo
+      return balance
+    except Exception:
+      return None
 
   def deposit(self, id: int, value: int) -> int:
     pass

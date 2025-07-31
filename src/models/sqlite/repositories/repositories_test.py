@@ -41,3 +41,9 @@ def test_insert_client_pessoa_fisica():
 
   repo = PessoaFisicaRepository(db_connection_handler)
   repo.insert_client(renda_mensal=renda_mensal, idade=idade, nome_completo=nome_completo, celular=celular, email=email, categoria=categoria, saldo=saldo)
+
+def test_get_balance():
+  repo = PessoaFisicaRepository(db_connection_handler)
+  response = repo.get_balance(1)
+
+  assert response == 10000
