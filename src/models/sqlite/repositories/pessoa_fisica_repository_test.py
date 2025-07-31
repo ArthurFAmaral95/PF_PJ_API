@@ -1,4 +1,5 @@
 from unittest import mock
+import pytest
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from sqlalchemy.orm.exc import NoResultFound
 from src.models.sqlite.entities.pessoa_fisica import PessoaFisicaTable
@@ -37,6 +38,17 @@ class MockConnectionNoResult:
   def __raise_no_result_found(self, *args, **kwargs):
     raise NoResultFound('No result found')
 
+  def __enter__(self): return self
+  def __exit__(self, exc_type, exc_val, exc_tb): pass
+
+class MockConnectionNoInsertion:
+  def __init__(self):
+    self.session = UnifiedAlchemyMagicMock()
+    self.session.add.side_effect = self.__raise_no_insertion
+
+  def __raise_no_insertion(self, *args, **kwargs):
+    raise Exception('No insertion made')
+  
   def __enter__(self): return self
   def __exit__(self, exc_type, exc_val, exc_tb): pass
 
@@ -100,3 +112,37 @@ def test_list_specific_client_no_result():
   mock_connection.session.first.assert_not_called()
 
   assert response == []
+
+def test_insert_client():
+  renda_mensal = 1000
+  idade = 30
+  nome_completo = 'Ciclano de Tal'
+  celular = '7536-9514'
+  email = 'ciclanodetal@example.com'
+  categoria = 'Categoria B'
+  saldo = 456
+
+  mock_connection = MockConnection()
+  repo = PessoaFisicaRepository(mock_connection)
+
+  repo.insert_client(renda_mensal=renda_mensal, idade=idade, nome_completo=nome_completo,celular=celular, email=email, categoria=categoria, saldo=saldo)
+
+  mock_connection.session.add.assert_called_once()
+
+def test_insert_client_error():
+  renda_mensal = 1000
+  idade = 30
+  nome_completo = 'Ciclano de Tal'
+  celular = '7536-9514'
+  email = 'ciclanodetal@example.com'
+  categoria = 'Categoria B'
+  saldo = 456
+
+  mock_connection = MockConnectionNoInsertion()
+  repo = PessoaFisicaRepository(mock_connection)
+
+  with pytest.raises(Exception):
+    repo.insert_client(renda_mensal=renda_mensal, idade=idade, nome_completo=nome_completo,celular=celular, email=email, categoria=categoria, saldo=saldo)
+  
+  mock_connection.session.add.assert_called_once()
+  mock_connection.session.rollback.assert_called_once()
