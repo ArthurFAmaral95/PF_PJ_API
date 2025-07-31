@@ -1,8 +1,9 @@
 from typing import List
 from sqlalchemy.orm.exc import NoResultFound
 from src.models.sqlite.entities.pessoa_fisica import PessoaFisicaTable
+from src.models.sqlite.interfaces.client_interface import ClientInterface
 
-class PessoaFisicaRepository:
+class PessoaFisicaRepository(ClientInterface):
   def __init__(self, db_connection) -> None:
     self.__db_connection = db_connection
 
@@ -44,3 +45,12 @@ class PessoaFisicaRepository:
       except Exception as execption:
         database.session.rollback()
         raise execption
+      
+  def get_balance(self, id: int) -> int:
+    pass
+
+  def deposit(self, id: int, value: int) -> int:
+    pass
+
+  def withdraw(self, id: int, value: int) -> int:
+    pass

@@ -1,0 +1,28 @@
+from abc import ABC, abstractmethod
+from typing import List
+
+class ClientInterface(ABC):
+  @abstractmethod
+  def list_all_clients(self) -> List:
+    pass
+
+  @abstractmethod
+  def list_specific_client(self, id: int) -> List:
+    pass
+
+  @abstractmethod
+  def insert_client(self, renda_mensal: int, idade: int, nome_completo: str, celular: str, email: str, categoria: str, saldo: int = 0) -> None:
+    pass
+
+  @abstractmethod
+  def get_balance(self, id: int) -> int:
+    pass
+
+  @abstractmethod
+  def deposit(self, id: int, value: int) -> int:
+    pass
+
+  @abstractmethod
+  def withdraw(self, id: int, value: int) -> int:
+    pass
+  
