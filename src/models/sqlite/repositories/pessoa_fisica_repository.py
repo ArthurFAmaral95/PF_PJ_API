@@ -70,7 +70,6 @@ class PessoaFisicaRepository(ClientInterface):
         database.session.rollback()
         raise exception
 
-
   def withdraw(self, id: int, withdraw_value: int) -> None:
     with self.__db_connection as database:
       try:

@@ -1,0 +1,35 @@
+from typing import List
+from sqlalchemy.orm.exc import NoResultFound
+from src.models.sqlite.entities.pessoa_juridica import PessoaJuridicaTable
+from src.models.sqlite.interfaces.client_interface import ClientInterface
+
+class PessoaJuridicaRepository(ClientInterface):
+  def __init__(self, db_connection) -> None:
+    self.__db_connection = db_connection
+  
+  def list_all_clients(self) -> List:
+    with self.__db_connection as database:
+      try:
+        clients = (
+          database.session
+          .query(PessoaJuridicaTable)
+          .all()
+        )
+        return clients
+      except NoResultFound:
+        return []
+
+  def list_specific_client(self, id: int) -> List:
+    pass
+
+  def insert_client(self) -> None:
+    pass
+
+  def get_balance(self, id: int) -> None:
+    pass
+
+  def deposit(self, id: int, deposit_value: int) -> None:
+    pass
+
+  def withdraw(self, id: int, withdraw_value: int) -> None:
+    pass

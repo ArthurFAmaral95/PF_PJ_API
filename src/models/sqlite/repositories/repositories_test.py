@@ -1,6 +1,7 @@
 import pytest
 from src.models.sqlite.settings.connection import db_connection_handler
 from src.models.sqlite.repositories.pessoa_fisica_repository import PessoaFisicaRepository
+from src.models.sqlite.repositories.pessoa_juridica_repository import PessoaJuridicaRepository
 
 db_connection_handler.connect_to_db()
 
@@ -55,3 +56,17 @@ def test_deposit_pessoa_fisica():
 def test_withdraw_pessoas_fisica():
   repo = PessoaFisicaRepository(db_connection_handler)
   repo.withdraw(id=5, withdraw_value=500)
+
+def test_list_all_pessoa_juridica_clients():
+  repo = PessoaJuridicaRepository(db_connection_handler)
+  response = repo.list_all_clients()
+  first_client = response[0]
+
+  assert first_client.id == 1
+  assert first_client.nome_fantasia == 'Empresa XYZ'
+  assert first_client.idade == 10
+  assert first_client.email_corporativo == 'contato@empresa.com'
+  assert first_client.celular == '1111-2222'
+  assert first_client.categoria == 'Categoria A'
+  assert first_client.faturamento == 100000
+  assert first_client.saldo == 50000

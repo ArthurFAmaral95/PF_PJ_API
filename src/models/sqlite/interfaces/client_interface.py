@@ -11,7 +11,7 @@ class ClientInterface(ABC):
     pass
 
   @abstractmethod
-  def insert_client(self, renda_mensal: int, idade: int, nome_completo: str, celular: str, email: str, categoria: str, saldo: int = 0) -> None:
+  def insert_client(self) -> None:
     pass
 
   @abstractmethod
