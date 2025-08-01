@@ -47,3 +47,7 @@ def test_get_balance():
   response = repo.get_balance(1)
 
   assert response == 10000
+
+def test_deposit():
+  repo = PessoaFisicaRepository(db_connection_handler)
+  repo.deposit(id=5, deposit_value=500)

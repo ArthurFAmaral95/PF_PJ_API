@@ -53,8 +53,23 @@ class PessoaFisicaRepository(ClientInterface):
     except Exception:
       return None
 
-  def deposit(self, id: int, value: int) -> int:
-    pass
+  def deposit(self, id: int, deposit_value: int) -> None:
+    with self.__db_connection as database:
+      try:
+        client = (
+          database.session
+          .query(PessoaFisicaTable)
+          .filter(PessoaFisicaTable.id == id)
+          .first()
+        )
+        # if client is None:
+        #   raise NoResultFound('Cliente não encontrado')
+        client.saldo += deposit_value
+        database.session.commit()
+      except Exception as exception:
+        database.session.rollback()
+        raise exception
 
-  def withdraw(self, id: int, value: int) -> int:
+
+  def withdraw(self, id: int, withdraw_value: int) -> None:
     pass
