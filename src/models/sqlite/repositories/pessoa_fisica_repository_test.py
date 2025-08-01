@@ -180,3 +180,24 @@ def test_deposit_error():
     repo.deposit(id=1, deposit_value=50)
 
   mock_connection.session.rollback.assert_called_once()
+
+def test_withdraw():
+  mock_connection = MockConnection()
+  repo = PessoaFisicaRepository(mock_connection)
+  repo.withdraw(id=1, withdraw_value=50)
+
+  mock_connection.session.query.assert_called_once_with(PessoaFisicaTable)
+  mock_connection.session.all.assert_not_called()
+  mock_connection.session.filter.assert_called_once_with(PessoaFisicaTable.id == 1)
+  mock_connection.session.first.assert_called_once()
+  mock_connection.session.commit.assert_called_once()
+
+def test_withdraw_error():
+  mock_connection = MockConnectionNoResult()
+  repo = PessoaFisicaRepository(mock_connection)
+
+  with pytest.raises(Exception):
+    repo.withdraw(id=1, withdraw_value=50)
+
+  mock_connection.session.rollback.assert_called_once()
+  

@@ -19,10 +19,10 @@ class ClientInterface(ABC):
     pass
 
   @abstractmethod
-  def deposit(self, id: int, value: int) -> None:
+  def deposit(self, id: int, deposit_value: int) -> None:
     pass
 
   @abstractmethod
-  def withdraw(self, id: int, value: int) -> None:
+  def withdraw(self, id: int, withdraw_value: int) -> None:
     pass
   
