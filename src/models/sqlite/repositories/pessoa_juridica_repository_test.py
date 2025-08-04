@@ -70,3 +70,33 @@ def test_list_all_clients_no_result():
   mock_connection.session.filter.assert_not_called()
 
   assert response == []
+
+def test_list_specific_client():
+  mock_connection = MockConnection()
+  repo = PessoaJuridicaRepository(mock_connection)
+  response = repo.list_specific_client(1)
+
+  mock_connection.session.query.assert_called_once_with(PessoaJuridicaTable)
+  mock_connection.session.filter.assert_called_once_with(PessoaJuridicaTable.id == 1)
+  mock_connection.session.all.assert_not_called()
+  mock_connection.session.first.assert_called_once()
+  
+  assert response.id == 1
+  assert response.faturamento == 5000000
+  assert response.idade == 2
+  assert response.nome_fantasia == 'Empresa Top'
+  assert response.celular == '1234-5678'
+  assert response.email_corporativo == 'empresatop@email.com'
+  assert response.categoria == 'Categoria Z'
+  assert response.saldo == 600000
+
+def test_list_specific_client_no_result():
+  mock_connection = MockConnectionNoResult()
+  repo = PessoaJuridicaRepository(mock_connection)
+  response = repo.list_specific_client(1)
+
+  mock_connection.session.query.assert_called_once_with(PessoaJuridicaTable)
+  mock_connection.session.filter.assert_not_called()
+  mock_connection.session.first.assert_not_called()
+
+  assert response == []

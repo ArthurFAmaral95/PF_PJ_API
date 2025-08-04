@@ -20,7 +20,17 @@ class PessoaJuridicaRepository(ClientInterface):
         return []
 
   def list_specific_client(self, id: int) -> List:
-    pass
+    with self.__db_connection as database:
+      try:
+        client = (
+          database.session
+          .query(PessoaJuridicaTable)
+          .filter(PessoaJuridicaTable.id == id)
+          .first()
+        )
+        return client
+      except NoResultFound:
+        return []
 
   def insert_client(self) -> None:
     pass

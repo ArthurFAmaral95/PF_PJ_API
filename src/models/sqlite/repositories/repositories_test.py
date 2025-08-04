@@ -70,3 +70,16 @@ def test_list_all_pessoa_juridica_clients():
   assert first_client.categoria == 'Categoria A'
   assert first_client.faturamento == 100000
   assert first_client.saldo == 50000
+
+def test_list_specific_pessoa_juridica_client():
+  repo = PessoaJuridicaRepository(db_connection_handler)
+  response = repo.list_specific_client(id=1)
+
+  assert response.id == 1
+  assert response.nome_fantasia == 'Empresa XYZ'
+  assert response.idade == 10
+  assert response.email_corporativo == 'contato@empresa.com'
+  assert response.celular == '1111-2222'
+  assert response.categoria == 'Categoria A'
+  assert response.faturamento == 100000
+  assert response.saldo == 50000
