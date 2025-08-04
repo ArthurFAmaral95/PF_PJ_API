@@ -42,9 +42,9 @@ class PessoaFisicaRepository(ClientInterface):
         )    
         database.session.add(new_client_data)
         database.session.commit()
-      except Exception as execption:
+      except Exception as exception:
         database.session.rollback()
-        raise execption
+        raise exception
       
   def get_balance(self, id: int) -> int:
     try:

@@ -83,3 +83,16 @@ def test_list_specific_pessoa_juridica_client():
   assert response.categoria == 'Categoria A'
   assert response.faturamento == 100000
   assert response.saldo == 50000
+
+@pytest.mark.skip(reason='adição de cliente no banco')
+def test_insert_client_pessoa_juridica():
+  faturamento = 500000
+  idade = 20
+  nome_fantasia = 'Empresa Top Top'
+  celular = '9876-5432'
+  email_corporativo = 'empresatoptop@email.com'
+  categoria = 'Categoria Z'
+  saldo = 10000
+
+  repo = PessoaJuridicaRepository(db_connection_handler)
+  repo.insert_client(faturamento=faturamento, idade=idade, nome_fantasia=nome_fantasia, celular=celular, email_corporativo=email_corporativo, categoria=categoria, saldo=saldo)

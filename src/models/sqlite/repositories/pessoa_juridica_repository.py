@@ -32,8 +32,23 @@ class PessoaJuridicaRepository(ClientInterface):
       except NoResultFound:
         return []
 
-  def insert_client(self) -> None:
-    pass
+  def insert_client(self, faturamento: int, idade: int, nome_fantasia: str, celular: str, email_corporativo: str, categoria: str, saldo: int = 0) -> None:
+    with self.__db_connection as database:
+      try:
+        new_client_data = PessoaJuridicaTable(
+          faturamento = faturamento,
+          idade = idade,
+          nome_fantasia = nome_fantasia,
+          celular = celular,
+          email_corporativo = email_corporativo,
+          categoria = categoria,
+          saldo = saldo
+        )
+        database.session.add(new_client_data)
+        database.session.commit()
+      except Exception as exception:
+        database.session.rollback()
+        raise exception
 
   def get_balance(self, id: int) -> None:
     pass

@@ -41,6 +41,17 @@ class MockConnectionNoResult:
   def __enter__(self): return self
   def __exit__(self, exc_type, exc_val, exc_tb): pass
 
+class MockConnectionNoInsertion:
+  def __init__(self):
+    self.session = UnifiedAlchemyMagicMock()
+    self.session.add.side_effect = self.__raise_no_insertion
+
+  def __raise_no_insertion(self, *args, **kwargs):
+    raise Exception('No insertion made')
+  
+  def __enter__(self): return self
+  def __exit__(self, exc_type, exc_val, exc_tb): pass
+
 def test_list_all_clients():
   mock_connection = MockConnection()
   repo = PessoaJuridicaRepository(mock_connection)
@@ -100,3 +111,36 @@ def test_list_specific_client_no_result():
   mock_connection.session.first.assert_not_called()
 
   assert response == []
+
+def test_insert_client():
+  faturamento = 500000
+  idade = 20
+  nome_fantasia = 'Empresa Top Top'
+  celular = '9876-5432'
+  email_corporativo = 'empresatoptop@email.com'
+  categoria = 'Categoria Z'
+  saldo = 10000
+
+  mock_connection = MockConnection()
+  repo = PessoaJuridicaRepository(mock_connection)
+  repo.insert_client(faturamento=faturamento, idade=idade, nome_fantasia=nome_fantasia, celular=celular, email_corporativo=email_corporativo, categoria=categoria, saldo=saldo)
+
+  mock_connection.session.add.assert_called_once()
+
+def test_insert_client_error():
+  faturamento = 500000
+  idade = 20
+  nome_fantasia = 'Empresa Top Top'
+  celular = '9876-5432'
+  email_corporativo = 'empresatoptop@email.com'
+  categoria = 'Categoria Z'
+  saldo = 10000 
+
+  mock_connection = MockConnectionNoInsertion()
+  repo = PessoaJuridicaRepository(mock_connection)
+
+  with pytest.raises(Exception):
+    repo.insert_client(faturamento=faturamento, idade=idade, nome_fantasia=nome_fantasia, celular=celular, email_corporativo=email_corporativo, categoria=categoria, saldo=saldo)
+  
+  mock_connection.session.add.assert_called_once()
+  mock_connection.session.rollback.assert_called_once()
