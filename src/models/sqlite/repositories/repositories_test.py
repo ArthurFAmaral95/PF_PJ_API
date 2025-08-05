@@ -96,3 +96,9 @@ def test_insert_client_pessoa_juridica():
 
   repo = PessoaJuridicaRepository(db_connection_handler)
   repo.insert_client(faturamento=faturamento, idade=idade, nome_fantasia=nome_fantasia, celular=celular, email_corporativo=email_corporativo, categoria=categoria, saldo=saldo)
+
+def test_get_balance_pessoa_juridica():
+  repo = PessoaJuridicaRepository(db_connection_handler)
+  response = repo.get_balance(1)
+
+  assert response == 50000

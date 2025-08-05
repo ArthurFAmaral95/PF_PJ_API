@@ -144,3 +144,17 @@ def test_insert_client_error():
   
   mock_connection.session.add.assert_called_once()
   mock_connection.session.rollback.assert_called_once()
+
+def test_get_balance():
+  mock_connection = MockConnection()
+  repo = PessoaJuridicaRepository(mock_connection)
+  response = repo.get_balance(1)
+
+  assert response == 600000
+
+def test_get_balance_no_result():
+  mock_connection = MockConnectionNoResult()
+  repo = PessoaJuridicaRepository(mock_connection)
+  response = repo.get_balance(1)
+
+  assert response is None
