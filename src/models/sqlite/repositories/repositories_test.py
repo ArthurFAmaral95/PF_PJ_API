@@ -121,3 +121,12 @@ def test_deposit_pessoa_juridica():
   balance_after_deposit = repo.get_balance(4)
   
   assert balance_after_deposit == current_balance + deposit_value
+
+def test_withdraw_pessoa_juridica():
+  withdraw_value = 10000
+  repo = PessoaJuridicaRepository(db_connection_handler)
+  current_balance = repo.get_balance(id=4)
+  repo.withdraw(id=4, withdraw_value=withdraw_value)
+  balance_after_withdraw = repo.get_balance(id=4)
+
+  assert balance_after_withdraw == current_balance - withdraw_value

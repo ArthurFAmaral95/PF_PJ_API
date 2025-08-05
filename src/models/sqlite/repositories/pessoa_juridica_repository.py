@@ -73,4 +73,17 @@ class PessoaJuridicaRepository(ClientInterface):
         raise exception
 
   def withdraw(self, id: int, withdraw_value: int) -> None:
-    pass
+    with self.__db_connection as database:
+      try:
+        client = (
+          database.session
+          .query(PessoaJuridicaTable)
+          .filter(PessoaJuridicaTable.id == id)
+          .first()
+        )
+        client.saldo -= withdraw_value
+        database.session.commit()
+      except Exception as exception:
+        database.session.rollback()
+        raise exception
+      
