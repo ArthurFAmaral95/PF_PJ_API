@@ -50,12 +50,22 @@ def test_get_balance_pessoa_fisica():
   assert response == 10000
 
 def test_deposit_pessoa_fisica():
+  deposit_value = 500
   repo = PessoaFisicaRepository(db_connection_handler)
-  repo.deposit(id=5, deposit_value=500)
+  current_balance = repo.get_balance(5)
+  repo.deposit(id=5, deposit_value=deposit_value)
+  balance_after_deposit = repo.get_balance(5)
+
+  assert balance_after_deposit == current_balance + deposit_value
 
 def test_withdraw_pessoas_fisica():
+  withdraw_value = 500
   repo = PessoaFisicaRepository(db_connection_handler)
-  repo.withdraw(id=5, withdraw_value=500)
+  current_balance = repo.get_balance(5)
+  repo.withdraw(id=5, withdraw_value=withdraw_value)
+  balance_after_withdraw = repo.get_balance(5)
+
+  assert balance_after_withdraw == current_balance - withdraw_value
 
 def test_list_all_pessoa_juridica_clients():
   repo = PessoaJuridicaRepository(db_connection_handler)
@@ -69,7 +79,7 @@ def test_list_all_pessoa_juridica_clients():
   assert first_client.celular == '1111-2222'
   assert first_client.categoria == 'Categoria A'
   assert first_client.faturamento == 100000
-  assert first_client.saldo == 50000
+  assert first_client.saldo == 70000
 
 def test_list_specific_pessoa_juridica_client():
   repo = PessoaJuridicaRepository(db_connection_handler)
@@ -82,7 +92,7 @@ def test_list_specific_pessoa_juridica_client():
   assert response.celular == '1111-2222'
   assert response.categoria == 'Categoria A'
   assert response.faturamento == 100000
-  assert response.saldo == 50000
+  assert response.saldo == 70000
 
 @pytest.mark.skip(reason='adição de cliente no banco')
 def test_insert_client_pessoa_juridica():
@@ -101,4 +111,13 @@ def test_get_balance_pessoa_juridica():
   repo = PessoaJuridicaRepository(db_connection_handler)
   response = repo.get_balance(1)
 
-  assert response == 50000
+  assert response == 70000
+
+def test_deposit_pessoa_juridica():
+  deposit_value = 10000
+  repo = PessoaJuridicaRepository(db_connection_handler)
+  current_balance = repo.get_balance(4)
+  repo.deposit(id=4, deposit_value=deposit_value)
+  balance_after_deposit = repo.get_balance(4)
+  
+  assert balance_after_deposit == current_balance + deposit_value

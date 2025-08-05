@@ -158,3 +158,24 @@ def test_get_balance_no_result():
   response = repo.get_balance(1)
 
   assert response is None
+
+def test_deposit():
+  mock_connection = MockConnection()
+  repo = PessoaJuridicaRepository(mock_connection)
+  repo.deposit(id=1, deposit_value=50)
+
+  mock_connection.session.query.assert_called_once_with(PessoaJuridicaTable)
+  mock_connection.session.filter.assert_called_once_with(PessoaJuridicaTable.id == 1)
+  mock_connection.session.all.assert_not_called()
+  mock_connection.session.first.assert_called_once()
+  mock_connection.session.commit.assert_called_once()
+
+def test_deposit_error():
+  mock_connection = MockConnectionNoResult()
+  repo = PessoaJuridicaRepository(mock_connection)
+
+  with pytest.raises(Exception):
+    repo.deposit(id=1, deposit_value=500)
+
+  mock_connection.session.rollback.assert_called_once()
+  
