@@ -28,7 +28,7 @@ class PessoaFisicaRepository(ClientInterface):
       except NoResultFound:
         return []
       
-  def insert_client(self, renda_mensal: int, idade: int, nome_completo: str, celular: str, email: str, categoria: str, saldo: int = 0) -> None:
+  def insert_client(self, renda_mensal: float, idade: int, nome_completo: str, celular: str, email: str, categoria: str, saldo: float = 0) -> None:
     with self.__db_connection as database:
       try:
         new_client_data = PessoaFisicaTable(
@@ -53,7 +53,7 @@ class PessoaFisicaRepository(ClientInterface):
     except Exception:
       return None
 
-  def deposit(self, id: int, deposit_value: int) -> None:
+  def deposit(self, id: int, deposit_value: float) -> None:
     with self.__db_connection as database:
       try:
         client = (
@@ -70,7 +70,7 @@ class PessoaFisicaRepository(ClientInterface):
         database.session.rollback()
         raise exception
 
-  def withdraw(self, id: int, withdraw_value: int) -> None:
+  def withdraw(self, id: int, withdraw_value: float) -> None:
     with self.__db_connection as database:
       try:
         client = (

@@ -34,9 +34,9 @@ def test_list_specific_pessoa_fisica_client():
 def test_insert_client_pessoa_fisica():
   renda_mensal = 10000
   idade = 35
-  nome_completo = 'Nome Completo'
-  celular = '8765-4321'
-  email = 'email@example.com'
+  nome_completo = 'Nome Completo4'
+  celular = '8765-4324'
+  email = 'email4@example.com'
   categoria = 'Categoria B'
   saldo = 6000
 
