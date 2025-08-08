@@ -46,7 +46,7 @@ class PessoaFisicaRepository(ClientInterface):
         database.session.rollback()
         raise exception
       
-  def get_balance(self, id: int) -> int:
+  def get_balance(self, id: int) -> float:
     try:
       balance = self.list_specific_client(id=id).saldo
       return balance
