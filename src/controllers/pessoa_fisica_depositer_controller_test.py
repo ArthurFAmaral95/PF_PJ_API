@@ -23,9 +23,14 @@ def test_make_deposit():
 
   assert response == expected_response
 
-def test_make_deposit_error():
+def test_make_deposit_not_number_error():
   controller = PessoaFisicaDepositerController(MockPessoaFisicaRepository())
 
   with pytest.raises(Exception):
     controller.make_deposit(id=1, deposit_value='abc')
     
+def test_make_deposit_negative_value_error():
+  controller = PessoaFisicaDepositerController(MockPessoaFisicaRepository())
+
+  with pytest.raises(Exception):
+    controller.make_deposit(id=1, deposit_value=-100)

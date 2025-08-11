@@ -14,6 +14,9 @@ class PessoaFisicaDepositerController:
   def __validate_deposit_value(self, deposit_value):
     if not isinstance(deposit_value, (int, float)):
       raise ValueError('Valor do depósito deve ser um número.')
+    
+    if deposit_value <= 0:
+      raise ValueError('Valor do depósito deve ser um número maior do que zero.')
 
   def __make_deposit_in_db(self, id: int, deposit_value: float) -> None:
     self.__pessoa_fisica_repository.deposit(id=id, deposit_value=deposit_value)
