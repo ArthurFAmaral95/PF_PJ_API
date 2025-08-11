@@ -5,6 +5,9 @@ class MockPessoaFisicaRepository():
   def withdraw(self, id: int, withdraw_value: float):
     pass
 
+  def get_balance(self, id: int):
+    return 100
+
 def test_make_withdrawal():
   controller = PessoaFisicaWithdrawController(MockPessoaFisicaRepository())
 
@@ -41,3 +44,9 @@ def test_make_withdrawal_over_limit_error():
   
   with pytest.raises(Exception):
     controller.make_withdrawal(id=1, withdraw_value=100000)
+
+def test_make_withdrawal_not_enough_balance():
+  controller = PessoaFisicaWithdrawController(MockPessoaFisicaRepository())
+
+  with pytest.raises(Exception):
+    controller.make_withdrawal(id=1, withdraw_value=1000)
