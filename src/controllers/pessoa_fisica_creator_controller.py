@@ -15,7 +15,7 @@ class PessoaFisicaCreatorController:
     categoria = client_info['categoria']
     saldo = client_info['saldo']
 
-    self.__validade_renda_mensal(renda_mensal=renda_mensal)
+    self.__validate_renda_mensal(renda_mensal=renda_mensal)
     self.__validate_idade(idade=idade)
     self.__validate_nome_completo(nome_completo=nome_completo)
     self.__validate_celular(celular=celular)
@@ -27,7 +27,7 @@ class PessoaFisicaCreatorController:
     formatted_response = self.__format_response(client_info=client_info)
     return formatted_response
 
-  def __validade_renda_mensal(self, renda_mensal: float) -> None:
+  def __validate_renda_mensal(self, renda_mensal: float) -> None:
     if not isinstance(renda_mensal, (int, float)):
       raise ValueError('Renda mensal deve ser um número.')
     

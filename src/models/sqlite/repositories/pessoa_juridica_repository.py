@@ -32,7 +32,7 @@ class PessoaJuridicaRepository(ClientInterface):
       except NoResultFound:
         return []
 
-  def insert_client(self, faturamento: int, idade: int, nome_fantasia: str, celular: str, email_corporativo: str, categoria: str, saldo: float = 0) -> None:
+  def insert_client(self, faturamento: float, idade: int, nome_fantasia: str, celular: str, email_corporativo: str, categoria: str, saldo: float = 0) -> None:
     with self.__db_connection as database:
       try:
         new_client_data = PessoaJuridicaTable(
