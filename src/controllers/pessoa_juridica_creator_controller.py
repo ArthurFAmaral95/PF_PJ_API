@@ -1,8 +1,9 @@
 from typing import Dict
 import re
 from src.models.sqlite.interfaces.client_interface import ClientInterface
+from src.controllers.interfaces.creator_controller_interface import CreatorControllerInterface
 
-class PessoaJuridicaCreatorController:
+class PessoaJuridicaCreatorController(CreatorControllerInterface):
   def __init__(self, pessoa_juridica_repository: ClientInterface):
     self.__pessoa_juridica_repository = pessoa_juridica_repository
 

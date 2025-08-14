@@ -1,7 +1,8 @@
 from typing import Dict
 from src.models.sqlite.interfaces.client_interface import ClientInterface
+from src.controllers.interfaces.balance_getter_controller_interface import BalanceGetterControllerInterface
 
-class PessoaFisicaBalanceGetterController:
+class PessoaFisicaBalanceGetterController(BalanceGetterControllerInterface):
   def __init__(self, pessoa_fisica_repository: ClientInterface):
     self.__pessoa_fisica_repository = pessoa_fisica_repository
 

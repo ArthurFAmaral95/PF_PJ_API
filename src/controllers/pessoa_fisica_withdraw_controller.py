@@ -1,7 +1,8 @@
 from typing import Dict
 from src.models.sqlite.interfaces.client_interface import ClientInterface
+from src.controllers.interfaces.withdraw_controller_interface import WithdrawControllerInterface
 
-class PessoaFisicaWithdrawController:
+class PessoaFisicaWithdrawController(WithdrawControllerInterface):
   def __init__(self, pessoa_fisica_repository: ClientInterface):
     self.__pessoa_fisica_repository = pessoa_fisica_repository
 

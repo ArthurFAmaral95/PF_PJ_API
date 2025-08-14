@@ -1,7 +1,8 @@
 from typing import Dict, List
 from src.models.sqlite.interfaces.client_interface import ClientInterface
+from src.controllers.interfaces.lister_controller_interface import ListerControllerInterface
 
-class PessoaFisicaListerController:
+class PessoaFisicaListerController(ListerControllerInterface):
   def __init__(self, pessoa_fisica_repository: ClientInterface):
     self.__pessoa_fisica_repository = pessoa_fisica_repository
 
