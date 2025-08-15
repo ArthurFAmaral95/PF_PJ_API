@@ -8,16 +8,7 @@ class MockCreatorController:
     'data': {
       'type': 'Pessoa Jurídica', 
       'count': 1, 
-      'attributes': {
-        'faturamento': 123456789, 
-        'idade': 30, 
-        'nome_fantasia': 
-        'Empresa Teste', 
-        'celular': '1234-5678', 
-        'email_corporativo': 'email@exemplo.com', 
-        'categoria': 'Categoria teste', 
-        'saldo': 987654321
-      }
+      'attributes': client_info
     }
   }
 
