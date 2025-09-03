@@ -4,6 +4,7 @@ from src.main.composer.pessoa_fisica_lister_all_composer import pessoa_fisica_li
 from src.main.composer.pessoa_fisica_lister_composer import pessoa_fisica_lister_composer
 from src.main.composer.pessoa_fisica_creator_composer import pessoa_fisica_creator_composer
 from src.main.composer.pessoa_fisica_balance_getter_composer import pessoa_fisica_balance_getter_composer
+from src.main.composer.pessoa_fisica_depositer_composer import pessoa_fisica_depositer_composer
 
 pessoa_fisica_route_bp = Blueprint("pessoa_fisica_routes", __name__)
 
@@ -41,4 +42,12 @@ def pessoa_fisica_get_balance(client_id):
 
   http_response = view.handle(http_request=http_request)
 
+  return jsonify(http_response.body), http_response.status_code
+
+@pessoa_fisica_route_bp.route("/pf/deposit/<client_id>", methods=["POST"])
+def pessoa_fisica_make_deposit(client_id):
+  http_request = HttpRequest(body=request.json, param={'client_id': client_id})
+  view = pessoa_fisica_depositer_composer()
+
+  http_response = view.handle(http_request=http_request)
   return jsonify(http_response.body), http_response.status_code
