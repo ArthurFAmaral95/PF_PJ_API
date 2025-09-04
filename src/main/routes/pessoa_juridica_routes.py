@@ -5,6 +5,7 @@ from src.main.composer.pessoa_juridica_lister_composer import pessoa_juridica_li
 from src.main.composer.pessoa_juridica_creator_composer import pessoa_juridica_creator_composer
 from src.main.composer.pessoa_juridica_balance_getter_composer import pessoa_juridica_balance_getter_composer
 from src.main.composer.pessoa_juridica_depositer_composer import pessoa_juridica_depositer_composer
+from src.main.composer.pessoa_juridica_withdraw_composer import pessoa_juridica_withdraw_composer
 
 pessoa_juridica_route_bp = Blueprint('pessoa_juridica_routes', __name__)
 
@@ -48,3 +49,12 @@ def pessoa_juridica_make_deposit(client_id):
 
   http_response = view.handle(http_request=http_request)
   return jsonify(http_response.body), http_response.status_code
+
+@pessoa_juridica_route_bp.route('/pj/withdraw/<client_id>', methods=['POST'])
+def pessoa_juridica_make_withdrawal(client_id):
+  http_request = HttpRequest(body=request.json, param={'client_id': client_id})
+  view = pessoa_juridica_withdraw_composer()
+
+  http_response = view.handle(http_request=http_request)
+  return jsonify(http_response.body), http_response.status_code
+  
