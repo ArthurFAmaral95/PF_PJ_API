@@ -3,6 +3,7 @@ from src.views.http_types.http_request import HttpRequest
 from src.main.composer.pessoa_juridica_lister_all_composer import pessoa_juridica_lister_all_composer
 from src.main.composer.pessoa_juridica_lister_composer import pessoa_juridica_lister_composer
 from src.main.composer.pessoa_juridica_creator_composer import pessoa_juridica_creator_composer
+from src.main.composer.pessoa_juridica_balance_getter_composer import pessoa_juridica_balance_getter_composer
 
 pessoa_juridica_route_bp = Blueprint('pessoa_juridica_routes', __name__)
 
@@ -30,4 +31,11 @@ def create_pessoa_juridica():
 
   http_response = view.handle(http_request=http_request)
   return jsonify(http_response.body), http_response.status_code
-  
+
+@pessoa_juridica_route_bp.route('/pj/balance/<client_id>', methods=['GET'])
+def pessoa_juridica_get_balance(client_id):
+  http_request = HttpRequest(param={'client_id': client_id})
+  view = pessoa_juridica_balance_getter_composer()
+
+  http_response = view.handle(http_request=http_request)
+  return jsonify(http_response.body), http_response.status_code
