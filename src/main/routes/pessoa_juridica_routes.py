@@ -4,6 +4,7 @@ from src.main.composer.pessoa_juridica_lister_all_composer import pessoa_juridic
 from src.main.composer.pessoa_juridica_lister_composer import pessoa_juridica_lister_composer
 from src.main.composer.pessoa_juridica_creator_composer import pessoa_juridica_creator_composer
 from src.main.composer.pessoa_juridica_balance_getter_composer import pessoa_juridica_balance_getter_composer
+from src.main.composer.pessoa_juridica_depositer_composer import pessoa_juridica_depositer_composer
 
 pessoa_juridica_route_bp = Blueprint('pessoa_juridica_routes', __name__)
 
@@ -36,6 +37,14 @@ def create_pessoa_juridica():
 def pessoa_juridica_get_balance(client_id):
   http_request = HttpRequest(param={'client_id': client_id})
   view = pessoa_juridica_balance_getter_composer()
+
+  http_response = view.handle(http_request=http_request)
+  return jsonify(http_response.body), http_response.status_code
+
+@pessoa_juridica_route_bp.route('/pj/deposit/<client_id>', methods=['POST'])
+def pessoa_juridica_make_deposit(client_id):
+  http_request = HttpRequest(body=request.json, param={'client_id': client_id})
+  view = pessoa_juridica_depositer_composer()
 
   http_response = view.handle(http_request=http_request)
   return jsonify(http_response.body), http_response.status_code
