@@ -6,59 +6,84 @@ from src.main.composer.pessoa_fisica_creator_composer import pessoa_fisica_creat
 from src.main.composer.pessoa_fisica_balance_getter_composer import pessoa_fisica_balance_getter_composer
 from src.main.composer.pessoa_fisica_depositer_composer import pessoa_fisica_depositer_composer
 from src.main.composer.pessoa_fisica_withdraw_composer import pessoa_fisica_withdraw_composer
+from src.errors.error_handler import handle_errors
 
 pessoa_fisica_route_bp = Blueprint("pessoa_fisica_routes", __name__)
 
 @pessoa_fisica_route_bp.route("/pf", methods=["GET"])
 def list_all_pf():
-  http_request = HttpRequest()
-  view = pessoa_fisica_lister_all_composer()
+  try:
+    http_request = HttpRequest()
+    view = pessoa_fisica_lister_all_composer()
 
-  http_response = view.handle(http_request=http_request)
+    http_response = view.handle(http_request=http_request)
 
-  return jsonify(http_response.body), http_response.status_code
+    return jsonify(http_response.body), http_response.status_code
+  except Exception as exception:
+    http_response = handle_errors(exception)
+    return jsonify(http_response.body), http_response.status_code
 
 @pessoa_fisica_route_bp.route("/pf/<client_id>", methods=["GET"])
 def list_pessoa_fisica(client_id):
-  http_request = HttpRequest(param={'client_id': client_id})
-  view = pessoa_fisica_lister_composer()
+  try:
+    http_request = HttpRequest(param={'client_id': client_id})
+    view = pessoa_fisica_lister_composer()
 
-  http_response = view.handle(http_request=http_request)
+    http_response = view.handle(http_request=http_request)
 
-  return jsonify(http_response.body), http_response.status_code
+    return jsonify(http_response.body), http_response.status_code
+  except Exception as exception:
+    http_response = handle_errors(exception)
+    return jsonify(http_response.body), http_response.status_code
   
 @pessoa_fisica_route_bp.route("/pf", methods=["POST"])
 def create_pessoa_fisica():
-  http_request = HttpRequest(body=request.json)
-  view = pessoa_fisica_creator_composer()
+  try:
+    http_request = HttpRequest(body=request.json)
+    view = pessoa_fisica_creator_composer()
 
-  http_response = view.handle(http_request=http_request)
+    http_response = view.handle(http_request=http_request)
 
-  return jsonify(http_response.body), http_response.status_code
+    return jsonify(http_response.body), http_response.status_code
+  except Exception as exception:
+    http_response = handle_errors(exception)
+    return jsonify(http_response.body), http_response.status_code
 
 @pessoa_fisica_route_bp.route("/pf/balance/<client_id>", methods=["GET"])
 def pessoa_fisica_get_balance(client_id):
-  http_request = HttpRequest(param={'client_id': client_id})
-  view = pessoa_fisica_balance_getter_composer()
+  try:
+    http_request = HttpRequest(param={'client_id': client_id})
+    view = pessoa_fisica_balance_getter_composer()
 
-  http_response = view.handle(http_request=http_request)
+    http_response = view.handle(http_request=http_request)
 
-  return jsonify(http_response.body), http_response.status_code
+    return jsonify(http_response.body), http_response.status_code
+  except Exception as exception:
+    http_response = handle_errors(exception)
+    return jsonify(http_response.body), http_response.status_code
 
 @pessoa_fisica_route_bp.route("/pf/deposit/<client_id>", methods=["POST"])
 def pessoa_fisica_make_deposit(client_id):
-  http_request = HttpRequest(body=request.json, param={'client_id': client_id})
-  view = pessoa_fisica_depositer_composer()
+  try:
+    http_request = HttpRequest(body=request.json, param={'client_id': client_id})
+    view = pessoa_fisica_depositer_composer()
 
-  http_response = view.handle(http_request=http_request)
-  return jsonify(http_response.body), http_response.status_code
+    http_response = view.handle(http_request=http_request)
+    return jsonify(http_response.body), http_response.status_code
+  except Exception as exception:
+    http_response = handle_errors(exception)
+    return jsonify(http_response.body), http_response.status_code
 
 @pessoa_fisica_route_bp.route("/pf/withdraw/<client_id>", methods=["POST"])
 def pessoa_fisica_make_withdrawal(client_id):
-  http_request = HttpRequest(body=request.json, param={'client_id': client_id})
-  view = pessoa_fisica_withdraw_composer()
+  try:
+    http_request = HttpRequest(body=request.json, param={'client_id': client_id})
+    view = pessoa_fisica_withdraw_composer()
 
-  http_response = view.handle(http_request=http_request)
+    http_response = view.handle(http_request=http_request)
 
-  return jsonify(http_response.body), http_response.status_code
+    return jsonify(http_response.body), http_response.status_code
+  except Exception as exception:
+    http_response = handle_errors(exception)
+    return jsonify(http_response.body), http_response.status_code
   

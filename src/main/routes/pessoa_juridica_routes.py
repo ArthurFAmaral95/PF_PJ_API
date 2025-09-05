@@ -6,6 +6,7 @@ from src.main.composer.pessoa_juridica_creator_composer import pessoa_juridica_c
 from src.main.composer.pessoa_juridica_balance_getter_composer import pessoa_juridica_balance_getter_composer
 from src.main.composer.pessoa_juridica_depositer_composer import pessoa_juridica_depositer_composer
 from src.main.composer.pessoa_juridica_withdraw_composer import pessoa_juridica_withdraw_composer
+from src.errors.error_handler import handle_errors
 
 pessoa_juridica_route_bp = Blueprint('pessoa_juridica_routes', __name__)
 
@@ -28,11 +29,15 @@ def list_pessoa_juridica(client_id):
 
 @pessoa_juridica_route_bp.route('/pj', methods=['POST'])
 def create_pessoa_juridica():
-  http_request = HttpRequest(body=request.json)
-  view = pessoa_juridica_creator_composer()
+  try:
+    http_request = HttpRequest(body=request.json)
+    view = pessoa_juridica_creator_composer()
 
-  http_response = view.handle(http_request=http_request)
-  return jsonify(http_response.body), http_response.status_code
+    http_response = view.handle(http_request=http_request)
+    return jsonify(http_response.body), http_response.status_code
+  except Exception as exception:
+    http_response = handle_errors(exception)
+    return jsonify(http_response.body), http_response.status_code
 
 @pessoa_juridica_route_bp.route('/pj/balance/<client_id>', methods=['GET'])
 def pessoa_juridica_get_balance(client_id):
