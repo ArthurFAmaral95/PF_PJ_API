@@ -1,6 +1,7 @@
 from typing import Dict
 from src.models.sqlite.interfaces.client_interface import ClientInterface
 from src.controllers.interfaces.depositer_controller_interface import DepositerControllerInterface
+from src.errors.errors_types.http_bad_request import HttpBadRequestError
 
 class PessoaJuridicaDepositerController(DepositerControllerInterface):
   def __init__(self, pessoa_juridica_repository: ClientInterface):
@@ -15,10 +16,10 @@ class PessoaJuridicaDepositerController(DepositerControllerInterface):
 
   def __validate_deposit_value(self, deposit_value) -> None:
     if not isinstance(deposit_value, (int, float)):
-      raise ValueError('Valor do depósito deve ser um número.')
+      raise HttpBadRequestError('Valor do depósito deve ser um número.')
 
     if deposit_value <= 0:
-      raise ValueError('Valor do depósito deve ser um número maior do que zero.')
+      raise HttpBadRequestError('Valor do depósito deve ser um número maior do que zero.')
 
   def __make_deposit_in_db(self, id: int, deposit_value: float) -> None:
     self.__pessoa_juridica_repository.deposit(id=id, deposit_value=deposit_value)

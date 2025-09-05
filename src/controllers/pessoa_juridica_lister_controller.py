@@ -1,6 +1,7 @@
 from typing import Dict
 from src.models.sqlite.interfaces.client_interface import ClientInterface
 from src.controllers.interfaces.lister_controller_interface import ListerControllerInterface
+from src.errors.errors_types.http_not_found import HttpNotFoundError
 
 class PessoaJuridicaListerController(ListerControllerInterface):
   def __init__(self, pessoa_juridica_repository: ClientInterface):
@@ -14,7 +15,7 @@ class PessoaJuridicaListerController(ListerControllerInterface):
   def __get_client_in_db(self, id: int):
     client = self.__pessoa_juridica_repository.list_specific_client(id=id)
     if not client:
-      raise Exception('Cliente não encontrado.')
+      raise HttpNotFoundError('Cliente não encontrado.')
     
     return client
   

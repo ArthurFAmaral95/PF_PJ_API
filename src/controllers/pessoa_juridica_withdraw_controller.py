@@ -1,6 +1,7 @@
 from typing import Dict
 from src.models.sqlite.interfaces.client_interface import ClientInterface
 from src.controllers.interfaces.withdraw_controller_interface import WithdrawControllerInterface
+from src.errors.errors_types.http_bad_request import HttpBadRequestError
 
 class PessoaJuridicaWithdrawController(WithdrawControllerInterface):
   def __init__(self, pessoa_juridica_repository: ClientInterface):
@@ -16,13 +17,13 @@ class PessoaJuridicaWithdrawController(WithdrawControllerInterface):
 
   def __validate_withdrawal_value(self, withdraw_value: float) -> None:
     if not isinstance(withdraw_value, (int, float)):
-      raise ValueError('Valor de saque deve ser um número.')
+      raise HttpBadRequestError('Valor de saque deve ser um número.')
 
     if withdraw_value <= 0:
-      raise ValueError('Valor do saque deve ser um número maior do que zero.')
+      raise HttpBadRequestError('Valor do saque deve ser um número maior do que zero.')
 
     if withdraw_value > 200000:
-      raise Exception('Limite máximo de saque permitido para pessoa jurídica de $200.000')
+      raise HttpBadRequestError('Limite máximo de saque permitido para pessoa jurídica de $200.000')
     
   def __validate_balance_after_withdrawal(self, id: int, withdraw_value: float) -> None:
     current_balance = self.__pessoa_juridica_repository.get_balance(id=id)
