@@ -1,19 +1,26 @@
-from typing import Dict
+from typing import Dict, List
 from src.models.sqlite.interfaces.client_interface import ClientInterface
 from src.controllers.interfaces.withdraw_controller_interface import WithdrawControllerInterface
 from src.errors.errors_types.http_bad_request import HttpBadRequestError
+from src.errors.errors_types.http_not_found import HttpNotFoundError
 
 class PessoaJuridicaWithdrawController(WithdrawControllerInterface):
   def __init__(self, pessoa_juridica_repository: ClientInterface):
     self.__pessoa_juridica_repository = pessoa_juridica_repository
 
   def make_withdrawal(self, id: int, withdraw_value: float) -> Dict:
+    self.__validate_client_exist(id=id)
     self.__validate_withdrawal_value(withdraw_value=withdraw_value)
     self.__validate_balance_after_withdrawal(id=id, withdraw_value=withdraw_value)
     self.__make_withdrawal_in_db(id=id, withdraw_value=withdraw_value)
     formatted_response = self.__format_response(id=id, withdraw_value=withdraw_value)
 
     return formatted_response
+
+  def __validate_client_exist(self, id: float) -> List:
+    client = self.__pessoa_juridica_repository.list_specific_client(id=id)
+    if not client:
+      raise HttpNotFoundError('Cliente não encontrado.')
 
   def __validate_withdrawal_value(self, withdraw_value: float) -> None:
     if not isinstance(withdraw_value, (int, float)):

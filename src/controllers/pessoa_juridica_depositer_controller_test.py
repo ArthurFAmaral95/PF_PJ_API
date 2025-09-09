@@ -1,9 +1,21 @@
 import pytest
+from src.models.sqlite.entities.pessoa_juridica import PessoaJuridicaTable
 from src.controllers.pessoa_juridica_depositer_controller import PessoaJuridicaDepositerController
 
 class MockPessoaJuridicaRepository:
   def deposit(self, id: int, deposit_value: float):
     pass
+
+  def list_specific_client(self, id: int):
+    return PessoaJuridicaTable(
+        faturamento=100000,
+        idade=10,
+        nome_fantasia='Empresa Teste',
+        celular='1234-5678',
+        email_corporativo='teste@email.com',
+        categoria='Categoria Teste',
+        saldo=1000000
+      )
 
 def test_make_deposit():
   controller = PessoaJuridicaDepositerController(MockPessoaJuridicaRepository())
